@@ -1,4 +1,3 @@
-```html
 <h1 align="center">📚 Bookstore REST API</h1>
 
 <p align="center">
@@ -362,4 +361,4 @@ http://localhost:5000
 <h2>👨‍💻 Author</h2>
 
 <p><b>Abdul Qadir</b></p>
-```
+
