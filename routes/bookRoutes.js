@@ -2,7 +2,7 @@
 // Defines all API routes for the /books endpoint
 
 const express = require("express");
-const router = express.Router();
+const router  = express.Router();
 
 const {
   createBook,
@@ -12,13 +12,23 @@ const {
   deleteBook,
 } = require("../controllers/bookController");
 
-// POST   /books       → Create a new book
-// GET    /books       → Get all books
-router.route("/").post(createBook).get(getAllBooks);
+const {
+  validateCreateBook,
+  validateUpdateBook,
+} = require("../middleware/validate");
 
-// GET    /books/:id   → Get a single book
-// PUT    /books/:id   → Update a book
-// DELETE /books/:id   → Delete a book
-router.route("/:id").get(getBookById).put(updateBook).delete(deleteBook);
+// POST   /books  → validate input first, then create
+// GET    /books  → supports ?page=1&limit=5&search=title&author=name
+router.route("/")
+  .post(validateCreateBook, createBook)
+  .get(getAllBooks);
+
+// GET    /books/:id  → get one
+// PUT    /books/:id  → validate input first, then update
+// DELETE /books/:id  → delete
+router.route("/:id")
+  .get(getBookById)
+  .put(validateUpdateBook, updateBook)
+  .delete(deleteBook);
 
 module.exports = router;

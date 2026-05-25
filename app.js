@@ -1,9 +1,10 @@
 // app.js
 // Entry point for the Bookstore REST API
 
-const express = require("express");
-const dotenv = require("dotenv");
-const connectDB = require("./config/db");
+const express    = require("express");
+const dotenv     = require("dotenv");
+const connectDB  = require("./config/db");
+const errorHandler = require("./middleware/errorHandler");
 
 // ── Load environment variables from .env ──────────────────
 dotenv.config();
@@ -27,11 +28,13 @@ app.get("/", (req, res) => {
     message: "📚 Welcome to the Bookstore API!",
     status: "Server is running",
     endpoints: {
-      "GET    /books":        "Get all books",
-      "POST   /books":        "Create a new book",
-      "GET    /books/:id":    "Get a single book by ID",
-      "PUT    /books/:id":    "Update a book by ID",
-      "DELETE /books/:id":    "Delete a book by ID",
+      "GET    /books":                      "Get all books",
+      "GET    /books?search=atomic":        "Search books by title or author",
+      "GET    /books?page=1&limit=5":       "Get books with pagination",
+      "POST   /books":                      "Create a new book",
+      "GET    /books/:id":                  "Get a single book by ID",
+      "PUT    /books/:id":                  "Update a book by ID",
+      "DELETE /books/:id":                  "Delete a book by ID",
     },
   });
 });
@@ -43,6 +46,9 @@ app.use((req, res) => {
     message: `Route ${req.originalUrl} not found`,
   });
 });
+
+// ── Global Error Handler (must be last) ───────────────────
+app.use(errorHandler);
 
 // ── Start server ───────────────────────────────────────────
 const PORT = process.env.PORT || 5000;

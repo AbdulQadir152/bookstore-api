@@ -1,32 +1,13 @@
 <h1 align="center">📚 Bookstore REST API</h1>
 
 <p align="center">
-A simple RESTful API for managing books in a bookstore using <b>Node.js</b>, <b>Express.js</b>, and <b>MongoDB</b>.
-</p>
-
-<p align="center">
-Built as part of the Backend Development Internship Task — Phase 2.
+A RESTful API for a Bookstore built with <b>Node.js</b>, <b>Express.js</b>, and <b>MongoDB</b>.<br>
+Supports full CRUD operations, input validation, pagination, and search filtering.
 </p>
 
 <hr>
 
-<h2>🚀 Features</h2>
-
-<ul>
-  <li>Create a new book</li>
-  <li>Get all books</li>
-  <li>Get a single book by ID</li>
-  <li>Update a book</li>
-  <li>Delete a book</li>
-  <li>MongoDB database integration using Mongoose</li>
-  <li>Environment variable support using dotenv</li>
-  <li>RESTful API architecture</li>
-  <li>API testing with Postman</li>
-</ul>
-
-<hr>
-
-<h2>🛠️ Tech Stack</h2>
+<h2>🛠️ Technologies Used</h2>
 
 <table>
   <tr>
@@ -35,35 +16,31 @@ Built as part of the Backend Development Internship Task — Phase 2.
   </tr>
   <tr>
     <td>Node.js</td>
-    <td>JavaScript runtime</td>
+    <td>JavaScript runtime environment</td>
   </tr>
   <tr>
     <td>Express.js</td>
-    <td>Backend framework</td>
+    <td>Web framework for building the API</td>
   </tr>
   <tr>
     <td>MongoDB</td>
-    <td>NoSQL database</td>
+    <td>NoSQL database for storing books</td>
   </tr>
   <tr>
     <td>Mongoose</td>
-    <td>MongoDB ODM</td>
+    <td>ODM library for MongoDB</td>
+  </tr>
+  <tr>
+    <td>express-validator</td>
+    <td>Input validation & sanitization</td>
   </tr>
   <tr>
     <td>dotenv</td>
-    <td>Environment variable management</td>
+    <td>Loading environment variables</td>
   </tr>
   <tr>
     <td>nodemon</td>
-    <td>Development auto-restart tool</td>
-  </tr>
-  <tr>
-    <td>Postman</td>
-    <td>API testing</td>
-  </tr>
-  <tr>
-    <td>Git & GitHub</td>
-    <td>Version control</td>
+    <td>Auto-restart server (development only)</td>
   </tr>
 </table>
 
@@ -73,78 +50,63 @@ Built as part of the Backend Development Internship Task — Phase 2.
 
 <pre>
 bookstore-api/
-├── app.js
+├── app.js                      # Entry point
 ├── config/
-│   └── db.js
-├── controllers/
-│   └── bookController.js
+│   └── db.js                   # MongoDB connection
 ├── models/
-│   └── Book.js
+│   └── Book.js                 # Book schema & model
+├── controllers/
+│   └── bookController.js       # CRUD logic + pagination + search
 ├── routes/
-│   └── bookRoutes.js
-├── .env
+│   └── bookRoutes.js           # Route definitions
+├── middleware/
+│   ├── validate.js             # Input validation rules
+│   └── errorHandler.js         # Global error handler
+├── .env                        # Environment variables (not committed)
+├── .env.example                # Safe template
 ├── .gitignore
-├── package.json
-└── package-lock.json
+├── README.md
+└── package.json
 </pre>
 
 <hr>
 
-<h2>⚙️ Installation & Setup</h2>
+<h2>⚙️ How to Run Locally</h2>
 
-<h3>1. Clone the Repository</h3>
+<h3>1. Clone the repository</h3>
 
-<pre>
-git clone https://github.com/your-username/bookstore-api.git
+```bash
+git clone https://github.com/<your-username>/bookstore-api.git
 cd bookstore-api
-</pre>
+```
 
-<h3>2. Install Dependencies</h3>
+<h3>2. Install dependencies</h3>
 
-<pre>
+```bash
 npm install
-</pre>
+```
 
-<h3>3. Create Environment Variables</h3>
+<h3>3. Set up environment variables</h3>
 
-<p>Create a <code>.env</code> file in the root directory and add:</p>
+```bash
+cp .env.example .env
+# Open .env and paste your MongoDB Atlas URI into MONGO_URI
+```
 
-<pre>
-PORT=5000
-MONGO_URI=your_mongodb_connection_string
-</pre>
+<h3>4. Start the server</h3>
 
-<hr>
+```bash
+npm run dev    # Development (auto-restarts)
+npm start      # Production
+```
 
-<h2>▶️ Run the Server</h2>
-
-<h3>Development Mode</h3>
-
-<pre>
-npm run dev
-</pre>
-
-<h3>Production Mode</h3>
-
-<pre>
-npm start
-</pre>
-
-<p>Server runs at:</p>
-
-<pre>
-http://localhost:5000
-</pre>
+<p><b>Server runs on:</b> http://localhost:5000</p>
 
 <hr>
 
-<h2>🔌 API Endpoints</h2>
+<h2>📌 API Endpoints</h2>
 
-<p><b>Base URL:</b></p>
-
-<pre>
-http://localhost:5000
-</pre>
+<p><b>Base URL:</b> <code>http://localhost:5000</code></p>
 
 <table>
   <tr>
@@ -153,43 +115,51 @@ http://localhost:5000
     <th>Description</th>
   </tr>
   <tr>
-    <td>POST</td>
-    <td>/books</td>
-    <td>Create a new book</td>
-  </tr>
-  <tr>
     <td>GET</td>
-    <td>/books</td>
+    <td><code>/books</code></td>
     <td>Get all books</td>
   </tr>
   <tr>
     <td>GET</td>
-    <td>/books/:id</td>
+    <td><code>/books?search=atomic</code></td>
+    <td>Search by title or author</td>
+  </tr>
+  <tr>
+    <td>GET</td>
+    <td><code>/books?page=1&limit=5</code></td>
+    <td>Paginated results</td>
+  </tr>
+  <tr>
+    <td>POST</td>
+    <td><code>/books</code></td>
+    <td>Create a new book</td>
+  </tr>
+  <tr>
+    <td>GET</td>
+    <td><code>/books/:id</code></td>
     <td>Get a single book by ID</td>
   </tr>
   <tr>
     <td>PUT</td>
-    <td>/books/:id</td>
-    <td>Update a book</td>
+    <td><code>/books/:id</code></td>
+    <td>Update a book by ID</td>
   </tr>
   <tr>
     <td>DELETE</td>
-    <td>/books/:id</td>
-    <td>Delete a book</td>
+    <td><code>/books/:id</code></td>
+    <td>Delete a book by ID</td>
   </tr>
 </table>
 
 <hr>
 
-<h2>📘 API Examples</h2>
+<h2>📝 Sample Requests & Responses</h2>
 
-<h3>1. Create a Book</h3>
+<h3>POST <code>/books</code> — Create a Book</h3>
 
-<p><b>POST</b> <code>/books</code></p>
+<p><b>Request Body:</b></p>
 
-<h4>Request Body</h4>
-
-<pre>
+```json
 {
   "title": "Atomic Habits",
   "author": "James Clear",
@@ -197,168 +167,70 @@ http://localhost:5000
   "isbn": "1234567890",
   "publishedDate": "2018-10-16"
 }
-</pre>
+```
 
-<h4>Response</h4>
+<p><b>Response (201):</b></p>
 
-<pre>
+```json
 {
   "success": true,
   "message": "Book created successfully",
   "data": {
-    "_id": "664b123abc456def78901234",
+    "_id": "64abc123...",
     "title": "Atomic Habits",
     "author": "James Clear",
     "price": 20,
     "isbn": "1234567890",
-    "publishedDate": "2018-10-16T00:00:00.000Z"
+    "publishedDate": "2018-10-16T00:00:00.000Z",
+    "createdAt": "2026-05-20T10:00:00.000Z",
+    "updatedAt": "2026-05-20T10:00:00.000Z"
   }
 }
-</pre>
+```
 
-<hr>
+<h3>Validation Error Response (400)</h3>
 
-<h3>2. Get All Books</h3>
-
-<p><b>GET</b> <code>/books</code></p>
-
-<h4>Response</h4>
-
-<pre>
+```json
 {
-  "success": true,
-  "count": 1,
-  "data": [
-    {
-      "_id": "664b123abc456def78901234",
-      "title": "Atomic Habits",
-      "author": "James Clear",
-      "price": 20,
-      "isbn": "1234567890"
-    }
+  "success": false,
+  "message": "Validation failed",
+  "errors": [
+    { "field": "title", "message": "Title is required" },
+    { "field": "price", "message": "Price must be a positive number" }
   ]
 }
-</pre>
+```
 
-<hr>
+<h3>GET <code>/books?search=atomic&page=1&limit=5</code></h3>
 
-<h3>3. Get Book by ID</h3>
+<p><b>Response (200):</b></p>
 
-<p><b>GET</b> <code>/books/:id</code></p>
-
-<h4>Response</h4>
-
-<pre>
+```json
 {
   "success": true,
-  "data": {
-    "_id": "664b123abc456def78901234",
-    "title": "Atomic Habits",
-    "author": "James Clear",
-    "price": 20
-  }
+  "total": 1,
+  "page": 1,
+  "pages": 1,
+  "count": 1,
+  "data": []
 }
-</pre>
-
-<hr>
-
-<h3>4. Update a Book</h3>
-
-<p><b>PUT</b> <code>/books/:id</code></p>
-
-<h4>Request Body</h4>
-
-<pre>
-{
-  "price": 25
-}
-</pre>
-
-<h4>Response</h4>
-
-<pre>
-{
-  "success": true,
-  "message": "Book updated successfully"
-}
-</pre>
-
-<hr>
-
-<h3>5. Delete a Book</h3>
-
-<p><b>DELETE</b> <code>/books/:id</code></p>
-
-<h4>Response</h4>
-
-<pre>
-{
-  "success": true,
-  "message": "Book deleted successfully"
-}
-</pre>
-
-<hr>
-
-<h2>❌ Error Responses</h2>
-
-<h3>Book Not Found</h3>
-
-<pre>
-{
-  "success": false,
-  "message": "Book not found"
-}
-</pre>
-
-<h3>Duplicate ISBN</h3>
-
-<pre>
-{
-  "success": false,
-  "message": "A book with this ISBN already exists"
-}
-</pre>
+```
 
 <hr>
 
 <h2>🧪 Testing with Postman</h2>
 
 <ol>
-  <li>Open Postman</li>
-  <li>Create a collection named <b>Bookstore API</b></li>
-  <li>Add requests for all endpoints</li>
-  <li>Use the header:
-    <pre>Content-Type: application/json</pre>
-  </li>
-  <li>Test CRUD operations using sample JSON data</li>
+  <li>Open Postman and create a collection named <b>Bookstore API</b>.</li>
+  <li>Set the base URL to <code>http://localhost:5000</code>.</li>
+  <li>Use <code>Content-Type: application/json</code> for POST and PUT requests.</li>
+  <li>Test all CRUD endpoints using the examples above.</li>
 </ol>
 
 <hr>
 
-<h2>🌐 Deployment (Optional)</h2>
+<h2>👤 Author</h2>
 
-<p>You can deploy this API using:</p>
-
-<ul>
-  <li>Render</li>
-  <li>Railway</li>
-</ul>
-
-<hr>
-
-<h2>📌 Internship Task Details</h2>
-
-<ul>
-  <li><b>Task:</b> Backend Development Internship — Phase 2</li>
-  <li><b>Project:</b> Build a Simple RESTful API for a Bookstore</li>
-  <li><b>Duration:</b> 3 Weeks</li>
-  <li><b>Tech Stack:</b> Node.js, Express.js, MongoDB, GitHub, Postman</li>
-</ul>
-
-<hr>
-
-<h2>👨‍💻 Author</h2>
-
-<p><b>Abdul Qadir</b></p>
-
+<p>
+Built as part of a Backend Development Internship Task — Phase 2.
+</p>
